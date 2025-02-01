@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: playboy7xb <playboy7xb@student.42.fr>      +#+  +:+       +#+        */
+/*   By: pcapalan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/01 17:45:30 by playboy7xb        #+#    #+#             */
-/*   Updated: 2025/02/01 17:47:50 by playboy7xb       ###   ########.fr       */
+/*   Created: 2025/02/01 17:53:14 by pcapalan          #+#    #+#             */
+/*   Updated: 2025/02/01 18:06:15 by pcapalan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void ft_init_iterators(t_itr *itr)
+void	ft_init_iterators(t_itr *itr)
 {
 	itr->i = 0;
 	itr->line_size = 0;
 }
 
-size_t ft_strlen(const char *str)
+size_t	ft_strlen(const char *str)
 {
-	size_t i;
+	size_t	i;
 
 	i = -1;
 	while (str[++i])
@@ -28,7 +28,7 @@ size_t ft_strlen(const char *str)
 	return (i);
 }
 
-size_t read_buffer(int fd, char *buffer, size_t *bytes_read, size_t *posix_current)
+size_t	read_buffer(int fd, char *buffer, size_t *b_read, size_t *pos_cur)
 {
 	*bytes_read = read(fd, buffer, BUFFER_SIZE);
 	if (*bytes_read == -1)
@@ -37,11 +37,11 @@ size_t read_buffer(int fd, char *buffer, size_t *bytes_read, size_t *posix_curre
 	return (*bytes_read);
 }
 
-char *allocate_or_resize_buffer(char *line, size_t *line_size)
+char	*allocate_or_resize_buffer(char *line, size_t *line_size)
 {
-	size_t i;
-	size_t new_size;
-	char *new_line;
+	size_t	i;
+	size_t	new_size;
+	char	*new_line;
 
 	if (*line_size == 0)
 		new_size = BUFFER_SIZE;
