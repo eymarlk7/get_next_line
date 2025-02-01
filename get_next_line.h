@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcapalan <pcapalan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eymarplayboy7 <eymarplayboy7@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:20:42 by pcapalan          #+#    #+#             */
-/*   Updated: 2024/05/30 17:20:44 by pcapalan         ###   ########.fr       */
+/*   Updated: 2025/02/01 17:23:34 by eymarplaybo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,23 @@
 #  define BUFFER_SIZE 42
 # endif
 
-char	*get_next_line(int fd);
-char	*ft_strjoin(char *s1, char *s2);
-char	*ft_strchr(char *s, int c);
-size_t	ft_strlen(char *s);
-char	*ft_read(int fd, char *str);
-char	*ft_getline(char *full_string);
-char	*ft_getrest(char *full_string);
+typedef struct s_itr
+{
+    size_t    i;
+    size_t    line_size;
+}    t_itr;
+
+typedef struct s_counts
+{
+    size_t    bytes_read;
+    size_t    posix_current;
+    t_itr     itr;
+}	t_counts;   
+
+
+char    *get_next_line(int fd);
+size_t  ft_strlen(const char *str);
+void	ft_init_iterators(t_itr *itr);
+size_t  read_buffer(int fd, char *buffer, size_t *bytes_read, size_t *posix_current);
 
 #endif

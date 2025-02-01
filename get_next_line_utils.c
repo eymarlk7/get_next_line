@@ -3,69 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcapalan <pcapalan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eymarplayboy7 <eymarplayboy7@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:00:50 by pcapalan          #+#    #+#             */
-/*   Updated: 2024/05/30 17:00:53 by pcapalan         ###   ########.fr       */
+/*   Updated: 2025/02/01 17:20:48 by eymarplaybo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(char *s)
+void	ft_init_iterators(t_itr *itr)
 {
-	size_t	i;
+	itr->i = 0;
+	itr->line_size = 0;
+}
 
-	i = 0;
-	if (!s)
-		return (0);
-	while (s[i] != '\0')
-		i++;
+size_t ft_strlen(const char *str)
+{
+	size_t i;
+
+	i = -1;
+	while (str[++i]);
 	return (i);
 }
 
-char	*ft_strchr(char *s, int c)
+size_t read_buffer(int fd, char *buffer, size_t *bytes_read, size_t *posix_current)
 {
-	int	i;
-
-	i = 0;
-	if (!s)
+	*bytes_read = read(fd, buffer, BUFFER_SIZE);
+	if (*bytes_read == -1)
 		return (0);
-	if (c == '\0')
-		return ((char *)&s[ft_strlen(s)]);
-	while (s[i] != '\0')
-	{
-		if (s[i] == (char) c)
-			return ((char *)&s[i]);
-		i++;
-	}
-	return (0);
-}
-
-char	*ft_strjoin(char *s1, char *s2)
-{
-	size_t	i;
-	size_t	j;
-	char	*str;
-
-	if (!s1)
-	{
-		s1 = (char *)malloc(1 * sizeof(char));
-		s1[0] = '\0';
-	}
-	if (!s1 || !s2)
-		return (NULL);
-	str = malloc(sizeof(char) * ((ft_strlen(s1) + ft_strlen(s2)) + 1));
-	if (str == NULL)
-		return (NULL);
-	i = -1;
-	j = 0;
-	if (s1)
-		while (s1[++i] != '\0')
-			str[i] = s1[i];
-	while (s2[j] != '\0')
-		str[i++] = s2[j++];
-	str[ft_strlen(s1) + ft_strlen(s2)] = '\0';
-	free(s1);
-	return (str);
+	*posix_current = 0;
+	return (*bytes_read);
 }

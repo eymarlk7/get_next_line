@@ -3,104 +3,79 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcapalan <pcapalan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eymarplayboy7 <eymarplayboy7@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:01:12 by pcapalan          #+#    #+#             */
-/*   Updated: 2024/05/30 17:09:49 by pcapalan         ###   ########.fr       */
+/*   Updated: 2025/02/01 17:25:55 by eymarplaybo      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
-char	*get_next_line(int fd)
+char *allocate_or_resize_buffer(char *line, size_t *line_size)
 {
-	static char	*full_string;
-	char		*line;
-
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (0);
-	full_string = ft_read(fd, full_string);
-	if (!full_string)
+	size_t i;
+    size_t new_size;
+	char *new_line;
+	
+	if (*line_size == 0)
+		new_size = BUFFER_SIZE;
+	else
+		new_size = (*line_size) * 2;
+	new_line = (char *)malloc(new_size);
+    if (!new_line) 
 		return (NULL);
-	line = ft_getline(full_string);
-	full_string = ft_getrest(full_string);
-	return (line);
+    i = -1;
+    while (++i < *line_size)
+        new_line[i] = line[i];
+    free(line);
+    *line_size = new_size;
+    return (new_line);
 }
 
-char	*ft_read(int fd, char *str)
+char *get_next_line(int fd)
 {
-	char	*tmp;
-	int		i;
-
-	tmp = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (!tmp)
+    static char str[BUFFER_SIZE];
+    static t_counts counts = {0, 0};
+    char *line; 
+    t_itr itr;
+    
+    ft_init_iterators(&itr);
+    line = NULL;
+    if (fd < 0 || BUFFER_SIZE <= 0) 
 		return (NULL);
-	i = 1;
-	while (!ft_strchr(str, '\n') && (i != 0))
-	{
-		i = read(fd, tmp, BUFFER_SIZE);
-		if (i == -1)
-		{
-			free(tmp);
-			return (NULL);
-		}
-		tmp[i] = '\0';
-		str = ft_strjoin(str, tmp);
-	}
-	free(tmp);
-	return (str);
+    while (1)
+    {
+        if (counts.posix_current >= counts.bytes_read)
+            if (read_buffer(fd, str, &counts.bytes_read, &counts.posix_current) <= 0)
+                break;
+        if (itr.i >= itr.line_size)
+            line = allocate_or_resize_buffer(line, &itr.line_size);
+        line[itr.i++] = str[counts.posix_current++];
+        if (line[itr.i - 1] == '\n')
+            break;
+    }
+    if (itr.i == 0)
+        return (free(line), NULL);
+    line[itr.i] = '\0';
+    return (line);
 }
 
-char	*ft_getline(char *full_string)
+int main(int argc, char const *argv[])
 {
-	int		i;
-	char	*line;
-
-	i = 0;
-	if (!full_string[i])
-		return (NULL);
-	while (full_string[i] && full_string[i] != '\n')
-		i++;
-	line = (char *)malloc(sizeof(char) * (i + 2));
-	if (!line)
-		return (NULL);
-	i = 0;
-	while (full_string[i] && full_string[i] != '\n')
-	{
-		line[i] = full_string[i];
-		i++;
-	}
-	if (full_string[i] == '\n')
-	{
-		line[i] = full_string[i];
-		i++;
-	}
-	line[i] = '\0';
-	return (line);
-}
-
-char	*ft_getrest(char *full_string)
-{
-	int		i;
-	int		j;
-	char	*restof;
-
-	i = 0;
-	while (full_string[i] && full_string[i] != '\n')
-		i++;
-	if (!full_string[i])
-	{
-		free(full_string);
-		return (NULL);
-	}
-	restof = (char *)malloc(sizeof(char) * (ft_strlen(full_string) - i + 1));
-	if (!restof)
-		return (NULL);
-	i++;
-	j = 0;
-	while (full_string[i])
-		restof[j++] = full_string[i++];
-	restof[j] = '\0';
-	free(full_string);
-	return (restof);
+    int fd = open("test.txt", O_RDONLY);
+    if (fd < 0)
+    {
+        perror("Error opening file");
+        return (1);
+    }
+	char *line;
+	while ((line = get_next_line(fd) )!= NULL)
+    {
+		printf("line: %s", line);
+        free(line);
+    }
+    close(fd);
+    return (0);
 }
