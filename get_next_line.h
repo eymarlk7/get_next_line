@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcapalan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: pcapalan <pcapalan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 17:51:42 by pcapalan          #+#    #+#             */
-/*   Updated: 2025/02/01 18:18:42 by pcapalan         ###   ########.fr       */
+/*   Updated: 2025/02/28 16:58:57 by pcapalan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 
 # define GET_NEXT_LINE_H
-# include <fcntl.h>
 # include <unistd.h>
 # include <stdlib.h>
 
@@ -31,7 +30,6 @@ typedef struct s_counts
 {
 	size_t	b_read;
 	size_t	pos_cur;
-	t_itr	itr;
 }	t_cnts;
 
 char	*get_next_line(int fd);

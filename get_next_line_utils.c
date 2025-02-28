@@ -30,11 +30,11 @@ size_t	ft_strlen(const char *str)
 
 size_t	read_buffer(int fd, char *buffer, size_t *b_read, size_t *pos_cur)
 {
-	*bytes_read = read(fd, buffer, BUFFER_SIZE);
-	if (*bytes_read == -1)
+	*b_read = read(fd, buffer, BUFFER_SIZE);
+	if ((int)(*b_read) == -1)
 		return (0);
-	*posix_current = 0;
-	return (*bytes_read);
+	*pos_cur = 0;
+	return (*b_read);
 }
 
 char	*allocate_or_resize_buffer(char *line, size_t *line_size)

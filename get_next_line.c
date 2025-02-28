@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pcapalan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: pcapalan <pcapalan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/01 17:56:47 by pcapalan          #+#    #+#             */
-/*   Updated: 2025/02/01 18:19:58 by pcapalan         ###   ########.fr       */
+/*   Updated: 2025/02/28 16:58:06 by pcapalan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*get_next_line(int fd)
 {
 	static char			str[BUFFER_SIZE];
 	char				*line;
-	static t_count		cnts = {0, 0};
+	static t_cnts		cnts = {0, 0};
 	t_itr				itr;
 
 	line = NULL;
